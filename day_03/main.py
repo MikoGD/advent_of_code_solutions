@@ -1,5 +1,5 @@
 def main():
-    with open('day_03/data_medium.txt', 'r', encoding='utf-8') as file:
+    with open('day_03/data_medium_1.txt', 'r', encoding='utf-8') as file:
         wires = [line.strip().split(',') for line in file]
         wire_1, wire_2 = wires
     # END WITH
@@ -41,10 +41,10 @@ def get_points(wire):
             points.append(new_point)
             last_point = new_point
 
-            print(f"Point {i} added: {new_point}")
+            #print(f"Point {i} added: {new_point}")
         # END FOR
 
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        # print("~~~~~~~~~~~~~~~~~~~~~~~~~~")
     # END FOR
 
     return points
