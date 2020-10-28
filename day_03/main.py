@@ -1,5 +1,8 @@
+from types import GetSetDescriptorType
+
+
 def main():
-    with open('day_03/data_medium_1.txt', 'r', encoding='utf-8') as file:
+    with open('day_03/data_small.txt', 'r', encoding='utf-8') as file:
         wires = [line.strip().split(',') for line in file]
         wire_1, wire_2 = wires
     # END WITH
@@ -12,8 +15,10 @@ def main():
 
     intersections = set_1.intersection(set_2)
     manhattan_distances = get_manhattan_distances(intersections)
+    intersection_steps = get_steps_to_intersection(
+        wire_1, wire_2, intersections)
 
-    print(manhattan_distances[1])
+    print(intersection_steps[0])
 # END main()
 
 
@@ -61,6 +66,72 @@ def get_manhattan_distances(intersections):
 
     return sorted(manhattan_distances)
 # END get_manhattan_distances()
+
+
+def get_steps_to_intersection(wire_1, wire_2, intersections):
+    steps_1 = []
+    curr_pos = [0, 0]
+    curr_steps = 0
+    for path in wire_1:
+        direction, steps = path[:1], int(path[1:])
+
+        for i in range(0, steps):
+            curr_steps += 1
+
+            if direction == "R":
+                curr_pos[0] += 1
+            elif direction == "L":
+                curr_pos[0] -= 1
+            elif direction == "U":
+                curr_pos[1] += 1
+            elif direction == "D":
+                curr_pos[1] -= 1
+            else:
+                print("ERROR: invalid direction: " + direction)
+                exit()
+            # END IF
+
+            if tuple(curr_pos) in intersections:
+                steps_1.append(curr_steps)
+            # END IF
+        # END FOR
+    # END FOR
+
+    steps_2 = []
+    curr_pos = [0, 0]
+    curr_steps = 0
+    for path in wire_2:
+        direction, steps = path[:1], int(path[1:])
+
+        for i in range(0, steps):
+            curr_steps += 1
+
+            if direction == "R":
+                curr_pos[0] += 1
+            elif direction == "L":
+                curr_pos[0] -= 1
+            elif direction == "U":
+                curr_pos[1] += 1
+            elif direction == "D":
+                curr_pos[1] -= 1
+            else:
+                print("ERROR: invalid direction: " + direction)
+                exit()
+            # END IF
+
+            if tuple(curr_pos) in intersections:
+                steps_2.append(curr_steps)
+            # END IF
+        # END FOR
+    # END FOR
+
+    intersection_steps = []
+    for i in range(0, len(steps_1)):
+        intersection_steps.append(steps_1[i] + steps_2[i])
+    # END FOR
+
+    return sorted(intersection_steps)
+# END get_steps_to_intersection()
 
 
 if __name__ == "__main__":
