@@ -29,8 +29,8 @@ class Grid:
                 diff = abs(diff)
 
                 for i in range(0, len(self.layout)):
-                    self.layout[i] = ([0] * diff) + self.layout[i]
-                    self.layout[i] += ([0] * diff)
+                    self.layout[i].insert(0, [0] * diff)
+                    self.layout[i].append([0] * diff)
                 # END FOR
                 self.y_max += diff * 2
                 self.check_grid_odd()
@@ -103,11 +103,15 @@ class Grid:
 
             for i in range(0, steps):
                 next_pos = curr_pos[X] + ((1 + i) * mode)
-                print(self.x_max, self.center, curr_pos, steps)
+                print(self.x_max, self.y_max, self.center, curr_pos, steps)
                 print(f'i = {i}')
                 print(f'direction: {direction}, mode: {mode}')
                 print(next_pos)
+                print(len(self.layout))
+                print(len(self.layout[next_pos]))
+                print(self.layout[next_pos][curr_pos[Y] - 1])
                 print('~~~~~~~~~~~~~~~~~')
+                self.to_file()
                 if self.layout[next_pos][curr_pos[Y]] == 0:
                     self.layout[next_pos][curr_pos[Y]] = wire_no
                 else:
@@ -146,6 +150,33 @@ class Grid:
         return curr_pos
     # END add_wire()
 
+    def get_intersections(self):
+        intersections = []
+        for i, col in enumerate(self.layout):
+            for j, row in enumerate(col):
+                if row == 3:
+                    intersections.append((j, i))
+                # END IF
+            # END FOR
+        # END FOR
+
+        return intersections
+    # END get_intersections()
+
+    def get_manhattan_distances(self):
+        intersections = self.get_intersections()
+        manhattan_distances = []
+
+        for intersection in intersections:
+            int_x, int_y = intersection
+            manhattan_distance = (
+                abs(self.center[X] - int_x) + abs(self.center[Y] - int_y))
+            manhattan_distances.append(manhattan_distance)
+        # END FOR
+
+        return sorted(manhattan_distances)
+    # END get_manhattan_distance()
+
     def to_string(self):
         string = f'center: {self.center}\nx_max: {self.x_max}\ny_max: {self.y_max}'
         return string
@@ -173,7 +204,7 @@ class Grid:
 
 
 def main():
-    with open('day_03/data_small.txt', 'r', encoding='utf-8') as file:
+    with open('day_03/data_medium_1.txt', 'r', encoding='utf-8') as file:
         wires = [line.strip().split(',') for line in file]
         wire_1, wire_2 = wires
     # END WITH
@@ -182,8 +213,11 @@ def main():
     draw_wire(wire_1, 1, grid)
     print(f'Drawing next wire ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     draw_wire(wire_2, 2, grid)
+    print(grid.get_manhattan_distances()[0])
+    """
     grid.to_file()
     print('wrote to file')
+    """
 # END main()
 
 
