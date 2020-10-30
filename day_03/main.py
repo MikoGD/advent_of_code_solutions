@@ -19,7 +19,7 @@ def main():
         points_1, points_2, intersections)
 
     intersections_steps = sorted(intersections_steps)
-    print(intersections_steps)
+    
     print(intersections_steps[1])
 # END main()
 
@@ -87,8 +87,6 @@ def get_steps_to_intersection(points_1, points_2, intersections):
         # END FOR
     # END FOR
 
-    print(steps_1)
-    print(steps_2)
     intersections_steps = []
     for i in range(0, len(steps_1)):
         intersections_steps.append(steps_1[i] + steps_2[i])
