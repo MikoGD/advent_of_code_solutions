@@ -2,7 +2,7 @@ from types import GetSetDescriptorType
 
 
 def main():
-    with open('day_03/data_medium_1.txt', 'r', encoding='utf-8') as file:
+    with open('day_03/data.txt', 'r', encoding='utf-8') as file:
         wires = [line.strip().split(',') for line in file]
         wire_1, wire_2 = wires
     # END WITH
@@ -13,18 +13,19 @@ def main():
     set_1 = set([point[:2] for point in points_1])
     set_2 = set([point[:2] for point in points_2])
 
-    intersections = list(set_1.intersection(set_2))
+    intersections = sorted(list(set_1.intersection(set_2)))
 
     intersections_steps = get_steps_to_intersection(
         points_1, points_2, intersections)
 
+    intersections_steps = sorted(intersections_steps)
+    print(intersections_steps)
     print(intersections_steps[1])
 # END main()
 
 
 def get_points(wire):
     points = [(0, 0, 0)]
-    points_coords = [(0, 0)]
 
     last_point = points[0]
     for path in wire:
@@ -48,16 +49,8 @@ def get_points(wire):
                 exit()
             # END IF
 
-            if new_point[:2] in points_coords:
-                temp = list(new_point)
-                temp[2] -= 1
-                new_point = tuple(temp)
-            # END IF
-
             points.append(new_point)
-            points_coords.append(new_point[:2])
             last_point = new_point
-
         # END FOR
     # END FOR
 
@@ -94,6 +87,8 @@ def get_steps_to_intersection(points_1, points_2, intersections):
         # END FOR
     # END FOR
 
+    print(steps_1)
+    print(steps_2)
     intersections_steps = []
     for i in range(0, len(steps_1)):
         intersections_steps.append(steps_1[i] + steps_2[i])
